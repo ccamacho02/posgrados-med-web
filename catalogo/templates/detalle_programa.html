@@ -1,0 +1,303 @@
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ programa_academico.nombre_programa }} - Especializaciones Médicas</title>
+    <link rel="stylesheet" href="../static/css/detalle_programa.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="{% url 'lista_programas' %}" class="logo">Especializaciones Médicas</a>
+            <nav class="nav-links">
+                <a href="{% url 'lista_programas' %}">Inicio</a>
+                <a href="{% url 'lista_programas' %}">Especializaciones</a>
+                <a href="#">Log In</a>
+                <a href="#" class="sign-in-btn">Sign In</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <!-- <div class="breadcrumb-container">
+        <nav class="breadcrumb">
+            <a href="{% url 'lista_programas' %}">Inicio</a>
+            <span class="breadcrumb-separator">></span>
+            <a href="{% url 'lista_programas' %}">Especializaciones</a>
+            <span class="breadcrumb-separator">></span>
+            <span class="breadcrumb-current">{{ programa_academico.nombre_programa }}</span>
+        </nav>
+    </div> -->
+
+    <!-- Header del programa -->
+    <section class="program-header">
+        <div class="program-header-container">
+            <div class="program-header-content">
+                <h1 class="program-header-title">{{ programa_academico.nombre_programa }}</h1>
+                <h2 class="program-header-university">{{ programa_academico.id_universidad.nombre_universidad }}</h2>
+                <div class="program-header-badges">
+                    <span class="badge">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Ciudad: {{ programa_academico.id_universidad.ciudad }}
+                    </span>
+                    <span class="badge">
+                        <i class="fas fa-id-card"></i>
+                        Código SNIES: {{ programa_academico.codigo_snies }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Contenido principal -->
+            <div class="main-column">
+                <div class="content-card">
+                    <h3 class="section-title">Información del Programa</h3>
+                    
+                    <div class="program-description">
+                        <div class="info-highlight">
+                            <h4><i class="fas fa-info-circle"></i>Acerca del programa</h4>
+                            <p>Este programa de especialización está diseñado para formar profesionales altamente capacitados en el área médica correspondiente, con énfasis en la excelencia académica y la práctica clínica.</p>
+                        </div>
+                    </div>
+
+                    <!-- Información básica en cards horizontales -->
+                    <div class="info-cards-grid">
+                        <div class="info-card-small">
+                            <div class="info-card-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="info-card-content">
+                                <h5>Duración</h5>
+                                <p>{{ programa_academico.duracion|default:"No especificado" }}</p>
+                            </div>
+                        </div>
+                        <div class="info-card-small">
+                            <div class="info-card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="info-card-content">
+                                <h5>Cupos</h5>
+                                <p>{{ programa_academico.numero_cupos|default:"No especificado" }}</p>
+                            </div>
+                        </div>
+                        <div class="info-card-small">
+                            <div class="info-card-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="info-card-content">
+                                <h5>Periodicidad</h5>
+                                <p>{{ programa_academico.periodicidad_admisiones|default:"Consultar" }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perfiles -->
+                    <div class="profiles-section">
+                        <h4 class="section-subtitle">Perfiles Académicos</h4>
+                        <div class="profiles-grid">
+                            <div class="profile-card">
+                                <div class="profile-header">
+                                    <i class="fas fa-user-graduate"></i>
+                                    <h5>Perfil del Aspirante</h5>
+                                </div>
+                                <div class="profile-content">
+                                    <p>{{ programa_academico.perfil_aspirante|default:"Información próximamente disponible." }}</p>
+                                </div>
+                            </div>
+                            <div class="profile-card">
+                                <div class="profile-header">
+                                    <i class="fas fa-briefcase"></i>
+                                    <h5>Perfil del Egresado</h5>
+                                </div>
+                                <div class="profile-content">
+                                    <p>{{ programa_academico.perfil_egresado|default:"Información próximamente disponible." }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Director del programa -->
+                    {% if programa_academico.nombre_director %}
+                    <div class="director-section">
+                        <div class="director-card">
+                            <div class="director-header">
+                                <i class="fas fa-user-tie"></i>
+                                <h5>Dirección del Programa</h5>
+                            </div>
+                            <div class="director-content">
+                                <h6>{{ programa_academico.nombre_director }}</h6>
+                                <span class="director-title">Director(a) del Programa</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-column">
+                <!-- Fechas Importantes -->
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fas fa-calendar-check"></i>
+                        <h4>Fechas Importantes</h4>
+                    </div>
+                    <div class="sidebar-card-content">
+                        {% if admision %}
+                            <div class="info-item">
+                                <span class="info-label">Fecha de Inicio de Inscripciones:</span>
+                                <span class="info-value">
+                                    {% if admision.fecha_inicio_inscripcion %}
+                                        {{ admision.fecha_inicio_inscripcion|date:"d/m/Y" }}
+                                    {% else %}
+                                        00/00/0000
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Fecha de Cierre de Inscripciones:</span>
+                                <span class="info-value">
+                                    {% if admision.fecha_cierre_inscripcion %}
+                                        {{ admision.fecha_cierre_inscripcion|date:"d/m/Y" }}
+                                    {% else %}
+                                        00/00/0000
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Fecha Examen:</span>
+                                <span class="info-value">
+                                    {% if admision.fecha_examen_admision %}
+                                        {{ admision.fecha_examen_admision|date:"d/m/Y" }}
+                                    {% else %}
+                                        00/00/0000
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Fecha publicación admitidos:</span>
+                                <span class="info-value">
+                                    {% if admision.fecha_publicacion_admitidos %}
+                                        {{ admision.fecha_publicacion_admitidos|date:"d/m/Y" }}
+                                    {% else %}
+                                        00/00/0000
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% else %}
+                            <p class="no-info">Información de admisión no disponible</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Información de Costos -->
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header">
+                        <i class="fas fa-dollar-sign"></i>
+                        <h4>Información de Costos</h4>
+                    </div>
+                    <div class="sidebar-card-content">
+                        {% if admision %}
+                            <div class="info-item">
+                                <span class="info-label">Precio Inscripción:</span>
+                                <span class="info-value price">
+                                    {% if admision.precio_inscripcion %}
+                                        ${{ admision.precio_inscripcion|intcomma }}
+                                    {% else %}
+                                        $000.000
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Precio Matrícula:</span>
+                                <span class="info-value price">
+                                    {% if admision.precio_semestre %}
+                                        ${{ admision.precio_semestre|intcomma }}
+                                    {% else %}
+                                        $00.000.000
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% else %}
+                            <p class="no-info">Información de costos no disponible</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Información de la Universidad -->
+                <div class="sidebar-card">
+                    <div class="sidebar-card-header university-header">
+                        <i class="fas fa-university"></i>
+                        <h4>{{ programa_academico.id_universidad.nombre_universidad }} - {{ programa_academico.id_universidad.ciudad }}</h4>
+                    </div>
+                    <div class="sidebar-card-content">
+                        <div class="contact-section">
+                            <h5>Información de Contacto</h5>
+                            {% if contactos %}
+                                {% for contacto in contactos %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>{{ contacto.telefono }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="no-info">Contacto no disponible</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Paso a paso del proceso -->
+                        {% if admision.paso_a_paso %}
+                        <div class="process-section">
+                            <h5>Proceso de Inscripción</h5>
+                            <p class="process-text">
+                                {{ admision.paso_a_paso|truncatewords:20 }}
+                            </p>
+                            <a href="#" class="process-link">Ver proceso completo</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="cta-section">
+                    <a href="{{ admision.url_inscripcion|default:'#' }}" class="cta-button">
+                        <i class="fas fa-pen"></i>
+                        Inscribirme Ahora
+                    </a>
+                    <p class="cta-subtitle">Proceso de inscripción en línea</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer call to action -->
+    <section class="footer-cta">
+        <div class="footer-cta-container">
+            <div class="footer-cta-content">
+                <h3>¿Necesitas más información?</h3>
+                <p>Contáctanos para resolver todas tus dudas sobre este programa</p>
+                <div class="footer-cta-buttons">
+                    <a href="tel:{{ contactos.0.telefono }}" class="footer-btn">
+                        <i class="fas fa-phone"></i>Llamar
+                    </a>
+                    <a href="mailto:info@universidad.edu.co" class="footer-btn">
+                        <i class="fas fa-envelope"></i>Enviar Email
+                    </a>
+                    <a href="#" class="footer-btn">
+                        <i class="fas fa-calendar"></i>Agendar Cita
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
