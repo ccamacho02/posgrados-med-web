@@ -3,39 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Programas de Posgrado en Medicina</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="../static/css/especializaciones.css">
+
 </head>
 <body>
-    <div class="container mt-4">
-        <h1 class="mb-4">Programas de Posgrado en Medicina</h1>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="{% url 'lista_programas' %}" class="logo">Especializaciones Médicas</a>
+            <nav class="nav-links">
+                <a href="{% url 'lista_programas' %}">Inicio</a>
+                <a href="{% url 'lista_programas' %}">Especializaciones</a>
+                <a href="#">Log In</a>
+                <a href="#" class="sign-in-btn">Sign In</a>
+            </nav>
+        </div>
+    </header>
 
-        <form method="get" class="row">
-            <div class="col-auto">
-                <input type="text" name="busqueda" class="form-control" placeholder="Buscar programa...">
-            </div>
-            <div class="col-auto">
-                <select name="id_universidad" class="form-select">
-                    <option value="">Universidades</option>
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">Especializaciones</h1>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <form method="get" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; width: 100%;">
+                <input type="text" 
+                       name="busqueda" 
+                       class="search-input"
+                       placeholder="Buscar programa..." 
+                       value="{{ request.GET.busqueda }}">
+                
+                <select name="id_universidad" class="select-input">
+                    <option value="">Universidad</option>
                     {% for universidad in universidades %}
-                        <option value="{{ universidad.id_universidad }}">{{ universidad.nombre_universidad }}</option>
+                        <option value="{{ universidad.id_universidad }}" 
+                                {% if request.GET.id_universidad == universidad.id_universidad|stringformat:"s" %}selected{% endif %}>
+                            {{ universidad.nombre_universidad }}
+                        </option>
                     {% endfor %}
                 </select>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Buscar</button>
-            </div>
-        </form>
+                
+                <button type="submit" class="filter-btn">Buscar por Especilizacion</button>
+            </form>
+        </div>
 
-        {% for programa in programas_academicos %}
-            <div class="card mt-2">
-                <div class="card-header">
-                    <h4>{{programa.nombre_programa}}</h4>
+        <!-- Cards Grid -->
+        <div class="cards-grid">
+            {% for programa in programas_academicos %}
+                <a href="{% url 'detalle_programa' programa.codigo_snies %}" class="program-card">
+                    <h3 class="program-title">{{ programa.nombre_programa }}</h3>
+                    <p class="university-name">{{ programa.id_universidad.nombre_universidad }}</p>
+                    <div class="program-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Código SNIES:</span>
+                            <span class="detail-value">{{ programa.codigo_snies }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Precio Inscripción:</span>
+                            {% if programa.precio_inscripcion %}
+                                <span class="detail-value price-value">${{ programa.precio_inscripcion|floatformat:0 }}</span>
+                            {% else %}
+                                <span class="detail-value not-available">No está Disponible</span>
+                            {% endif %}
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Precio Matrícula:</span>
+                            {% if programa.precio_matricula %}
+                                <span class="detail-value price-value">${{ programa.precio_matricula|floatformat:0 }}</span>
+                            {% else %}
+                                <span class="detail-value not-available">No está Disponible</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+            {% empty %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #666;">
+                    <p>No se encontraron programas que coincidan con los criterios de búsqueda.</p>
                 </div>
-                <div class="card-body">
-                    <p>{{programa.url}}</p>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    </main>
 </body>
+
 </html>
