@@ -28,6 +28,7 @@ def lista_programas(request):
     programas_academicos = (
         programas_academicos.exclude(codigo_snies__in=["N/A", "", "No disponible"])
         .exclude(codigo_snies__isnull=True)
+        .prefetch_related("admision")
         .all()
     )
 
@@ -51,19 +52,32 @@ def lista_programas(request):
 
 def detalle_programa(request, codigo_snies):
     # programa_academico = ProgramaAcademico.objects.get(codigo_snies=codigo_snies)
-    programa_academico = get_object_or_404(ProgramaAcademico, codigo_snies=codigo_snies)
+    programa_academico = get_object_or_404(
+        ProgramaAcademico.objects.select_related("id_universidad__contacto"),
+        codigo_snies=codigo_snies,
+    )
     # admision = get_object_or_404(Admision, codigo_snies=programa_academico.codigo_snies)
     admision = Admision.objects.filter(
         codigo_snies=programa_academico.codigo_snies
     ).first()
 
+    contacto = None
+    if hasattr(programa_academico.id_universidad, "contacto"):
+        # Si la universidad tiene un contacto, lo obtenemos
+        contacto = programa_academico.id_universidad.contacto
+
     print(programa_academico)
     print(admision)
+    print(contacto)
 
     return render(
         request,
         "detalle_programa.html",
-        {"programa_academico": programa_academico, "admision": admision},
+        {
+            "programa_academico": programa_academico,
+            "admision": admision,
+            "contacto": contacto,
+        },
     )
 
 

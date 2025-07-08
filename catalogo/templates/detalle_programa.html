@@ -17,8 +17,6 @@
             <nav class="nav-links">
                 <a href="{% url 'lista_programas' %}">Inicio</a>
                 <a href="{% url 'lista_programas' %}">Especializaciones</a>
-                <a href="#">Log In</a>
-                <a href="#" class="sign-in-btn">Sign In</a>
             </nav>
         </div>
     </header>
@@ -159,7 +157,7 @@
                                     {% if admision.fecha_inicio_inscripcion %}
                                         {{ admision.fecha_inicio_inscripcion|date:"d/m/Y" }}
                                     {% else %}
-                                        00/00/0000
+                                        No disponible
                                     {% endif %}
                                 </span>
                             </div>
@@ -169,7 +167,7 @@
                                     {% if admision.fecha_cierre_inscripcion %}
                                         {{ admision.fecha_cierre_inscripcion|date:"d/m/Y" }}
                                     {% else %}
-                                        00/00/0000
+                                        No disponible
                                     {% endif %}
                                 </span>
                             </div>
@@ -179,7 +177,7 @@
                                     {% if admision.fecha_examen_admision %}
                                         {{ admision.fecha_examen_admision|date:"d/m/Y" }}
                                     {% else %}
-                                        00/00/0000
+                                        No disponible
                                     {% endif %}
                                 </span>
                             </div>
@@ -189,7 +187,7 @@
                                     {% if admision.fecha_publicacion_admitidos %}
                                         {{ admision.fecha_publicacion_admitidos|date:"d/m/Y" }}
                                     {% else %}
-                                        00/00/0000
+                                        No disponible
                                     {% endif %}
                                 </span>
                             </div>
@@ -213,7 +211,7 @@
                                     {% if admision.precio_inscripcion %}
                                         ${{ admision.precio_inscripcion|intcomma }}
                                     {% else %}
-                                        $000.000
+                                        No disponible
                                     {% endif %}
                                 </span>
                             </div>
@@ -223,7 +221,7 @@
                                     {% if admision.precio_semestre %}
                                         ${{ admision.precio_semestre|intcomma }}
                                     {% else %}
-                                        $00.000.000
+                                        No disponible
                                     {% endif %}
                                 </span>
                             </div>
@@ -242,13 +240,11 @@
                     <div class="sidebar-card-content">
                         <div class="contact-section">
                             <h5>Información de Contacto</h5>
-                            {% if contactos %}
-                                {% for contacto in contactos %}
-                                    <div class="contact-item">
-                                        <i class="fas fa-phone"></i>
-                                        <span>{{ contacto.telefono }}</span>
-                                    </div>
-                                {% endfor %}
+                            {% if contacto %}
+                                <div class="contact-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>{{ contacto.telefono }}</span>
+                                </div>
                             {% else %}
                                 <p class="no-info">Contacto no disponible</p>
                             {% endif %}

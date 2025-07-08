@@ -17,8 +17,11 @@ class Universidad(models.Model):
 
 class Contacto(models.Model):
     id_contacto = models.AutoField(primary_key=True)
-    id_universidad = models.ForeignKey(
-        Universidad, on_delete=models.CASCADE, db_column="id_universidad"
+    id_universidad = models.OneToOneField(
+        Universidad,
+        on_delete=models.CASCADE,
+        db_column="id_universidad",
+        related_name="contacto",
     )
     telefono = models.CharField(max_length=15, blank=True, null=True)
     correo = models.EmailField(max_length=100, blank=True, null=True)
@@ -55,7 +58,10 @@ class ProgramaAcademico(models.Model):
 class Admision(models.Model):
     id_admision = models.CharField(primary_key=True, max_length=50)
     codigo_snies = models.ForeignKey(
-        ProgramaAcademico, on_delete=models.CASCADE, db_column="codigo_snies"
+        ProgramaAcademico,
+        on_delete=models.CASCADE,
+        db_column="codigo_snies",
+        related_name="admision",
     )
     periodo = models.CharField(max_length=6)
     fecha_inicio_inscripcion = models.DateField(blank=True, null=True)
