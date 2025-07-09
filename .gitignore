@@ -48,7 +48,3 @@ var/
 
 # Media (archivos subidos)
 media/
-
-# Static files (si se recolectan con collectstatic en producción)
-staticfiles/
-static/
