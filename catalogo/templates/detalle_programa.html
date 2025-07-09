@@ -241,10 +241,24 @@
                         <div class="contact-section">
                             <h5>Información de Contacto</h5>
                             {% if contacto %}
-                                <div class="contact-item">
-                                    <i class="fas fa-phone"></i>
-                                    <span>{{ contacto.telefono }}</span>
-                                </div>
+                                {% if contacto.nombre_contacto %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>{{ contacto.nombre_contacto }}</span>
+                                    </div>
+                                {% endif %}
+                                {% if contacto.correo %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>{{ contacto.correo }}</span>
+                                    </div>
+                                {% endif %}
+                                {% if contacto.telefono %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>{{ contacto.telefono }}</span>
+                                    </div>
+                                {% endif %}
                             {% else %}
                                 <p class="no-info">Contacto no disponible</p>
                             {% endif %}
@@ -265,7 +279,7 @@
 
                 <!-- Call to Action -->
                 <div class="cta-section">
-                    <a href="{{ admision.url_inscripcion|default:'#' }}" class="cta-button">
+                    <a href="{{ programa_academico.url|default:'#' }}" class="cta-button" target="_blank">
                         <i class="fas fa-pen"></i>
                         Inscribirme Ahora
                     </a>

@@ -25,6 +25,7 @@ class Contacto(models.Model):
     )
     telefono = models.CharField(max_length=15, blank=True, null=True)
     correo = models.EmailField(max_length=100, blank=True, null=True)
+    nombre_contacto = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
